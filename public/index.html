@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediReserva - Sistema de Citas Médicas</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>MediReserva</span>
+            </div>
+            <div class="nav-links">
+                <a href="#reservar" class="nav-link active">Reservar Cita</a>
+                <a href="#mis-citas" class="nav-link">Mis Citas</a>
+                <a href="admin.html" class="nav-link admin-btn">
+                    <i class="fas fa-cog"></i> Admin
+                </a>
+                <a href="doctor.html" class="nav-link doctor-btn">
+                    <i class="fas fa-user-md"></i> Doctor
+                </a>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Tu Salud en Buenas Manos</h1>
+                <p class="hero-subtitle">Reserva tu cita médica de forma rápida y sencilla con los mejores especialistas</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="doctorsCount">0</span>
+                        <span class="stat-label">Doctores</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="specialtiesCount">0</span>
+                        <span class="stat-label">Especialidades</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="appointmentsCount">0+</span>
+                        <span class="stat-label">Citas Realizadas</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="floating-card">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>Reserva Fácil</h3>
+                    <p>En 3 simples pasos</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Sección de Reserva -->
+        <section id="reservar" class="section">
+            <div class="container">
+                <h2 class="section-title">Reserva tu Cita</h2>
+                <p class="section-subtitle">Sigue estos simples pasos para agendar tu consulta</p>
+
+                <!-- Proceso de Reserva -->
+                <div class="booking-process">
+                    <!-- Paso 1: Especialidad -->
+                    <div class="step-card active" id="step1">
+                        <div class="step-header">
+                            <div class="step-number">1</div>
+                            <div class="step-info">
+                                <h3>Selecciona Especialidad</h3>
+                                <p>Elige el tipo de consulta que necesitas</p>
+                            </div>
+                        </div>
+                        <div class="step-content">
+                            <div class="specialties-grid" id="specialtiesGrid">
+                                <!-- Especialidades cargadas dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Paso 2: Doctor -->
+                    <div class="step-card" id="step2">
+                        <div class="step-header">
+                            <div class="step-number">2</div>
+                            <div class="step-info">
+                                <h3>Elige tu Doctor</h3>
+                                <p>Selecciona el especialista de tu preferencia</p>
+                            </div>
+                        </div>
+                        <div class="step-content">
+                            <div class="doctors-grid" id="doctorsGrid">
+                                <!-- Doctores cargados dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Paso 3: Fecha y Hora -->
+                    <div class="step-card" id="step3">
+                        <div class="step-header">
+                            <div class="step-number">3</div>
+                            <div class="step-info">
+                                <h3>Selecciona Fecha y Hora</h3>
+                                <p>Elige el horario que mejor te convenga</p>
+                            </div>
+                        </div>
+                        <div class="step-content">
+                            <div class="datetime-selection">
+                                <div class="date-picker-container">
+                                    <label for="appointmentDate" class="form-label">Fecha de la cita:</label>
+                                    <input type="date" id="appointmentDate" class="date-input" min="">
+                                </div>
+                                <div class="time-slots-container">
+                                    <label class="form-label">Horarios disponibles:</label>
+                                    <div class="time-slots-grid" id="timeSlotsGrid">
+                                        <!-- Horarios cargados dinámicamente -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Paso 4: Información Personal -->
+                    <div class="step-card" id="step4">
+                        <div class="step-header">
+                            <div class="step-number">4</div>
+                            <div class="step-info">
+                                <h3>Tus Datos</h3>
+                                <p>Completa tu información personal</p>
+                            </div>
+                        </div>
+                        <div class="step-content">
+                            <form class="patient-form" id="patientForm">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="patientName" class="form-label">Nombre completo *</label>
+                                        <input type="text" id="patientName" class="form-input" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="patientEmail" class="form-label">Email *</label>
+                                        <input type="email" id="patientEmail" class="form-input" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="patientPhone" class="form-label">Teléfono *</label>
+                                        <input type="tel" id="patientPhone" class="form-input" required>
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label for="appointmentReason" class="form-label">Motivo de la consulta</label>
+                                        <textarea id="appointmentReason" class="form-textarea" rows="3" placeholder="Describe brevemente el motivo de tu visita..."></textarea>
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label for="additionalNotes" class="form-label">Notas adicionales (opcional)</label>
+                                        <textarea id="additionalNotes" class="form-textarea" rows="2" placeholder="Alguna información adicional que quieras compartir..."></textarea>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navegación -->
+                <div class="navigation">
+                    <button class="btn btn-outline" id="prevBtn" disabled>
+                        <i class="fas fa-arrow-left"></i> Anterior
+                    </button>
+                    <button class="btn btn-primary" id="nextBtn">
+                        Siguiente <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn btn-success" id="confirmBtn" style="display: none;">
+                        <i class="fas fa-check"></i> Confirmar Cita
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Mis Citas -->
+        <section id="mis-citas" class="section section-alt">
+            <div class="container">
+                <h2 class="section-title">Mis Citas</h2>
+                <p class="section-subtitle">Consulta el estado de tus reservas</p>
+
+                <div class="search-citas">
+                    <div class="search-card">
+                        <h3>Buscar mis citas</h3>
+                        <p>Ingresa tu email y teléfono para ver tus reservas</p>
+                        <form class="search-form" id="searchAppointmentsForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="searchEmail" class="form-label">Email *</label>
+                                    <input type="email" id="searchEmail" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="searchPhone" class="form-label">Teléfono *</label>
+                                    <input type="tel" id="searchPhone" class="form-input" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Buscar Citas
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="appointments-results" id="appointmentsResults" style="display: none;">
+                    <h3>Tus Próximas Citas</h3>
+                    <div class="appointments-list" id="appointmentsList">
+                        <!-- Citas cargadas dinámicamente -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>MediReserva</span>
+                    </div>
+                    <p>Sistema profesional de gestión de citas médicas</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-phone"></i> +1 (000) 000-0000</p>
+                    <p><i class="fas fa-envelope"></i> eddy.martinez.dev@gmail.com</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Horario</h4>
+                    <p>Lunes - Viernes: 8:00 AM - 8:00 PM</p>
+                    <p>Sábados: 9:00 AM - 2:00 PM</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 MediReserva. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal de Confirmación -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-success">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3>¡Cita Confirmada!</h3>
+                <div class="appointment-details" id="appointmentDetails">
+                    <!-- Detalles de la cita -->
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" id="newBookingBtn">
+                        <i class="fas fa-plus"></i> Nueva Reserva
+                    </button>
+                    <button class="btn btn-outline" id="printBtn">
+                        <i class="fas fa-print"></i> Imprimir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Procesando...</p>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

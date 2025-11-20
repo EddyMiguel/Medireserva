@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Doctor - MediReserva</title>
+    <link rel="stylesheet" href="css/doctor.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="doctor-container">
+        <!-- Sidebar -->
+        <aside class="doctor-sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>MediReserva</span>
+                </div>
+                <div class="doctor-info" id="doctorInfo">
+                    <div class="doctor-avatar">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div class="doctor-details">
+                        <span class="doctor-name">Cargando...</span>
+                        <span class="doctor-specialty">Especialidad</span>
+                        <span class="doctor-id">ID: --</span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#agenda" class="nav-item active" data-tab="agenda">
+                    <i class="fas fa-calendar-day"></i>
+                    <span>Agenda del Día</span>
+                </a>
+                <a href="#proximas" class="nav-item" data-tab="proximas">
+                    <i class="fas fa-calendar-week"></i>
+                    <span>Próximas Citas</span>
+                </a>
+                <a href="#historial" class="nav-item" data-tab="historial">
+                    <i class="fas fa-history"></i>
+                    <span>Historial</span>
+                </a>
+                <a href="#estadisticas" class="nav-item" data-tab="estadisticas">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Estadísticas</span>
+                </a>
+                <a href="#perfil" class="nav-item" data-tab="perfil">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Mi Perfil</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Volver al Sitio</span>
+                </a>
+                <button class="nav-item logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Cerrar Sesión</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="doctor-main">
+            <!-- Header -->
+            <header class="doctor-header">
+                <div class="header-left">
+                    <button class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 id="pageTitle">Agenda del Día</h1>
+                </div>
+                <div class="header-right">
+                    <div class="header-actions">
+                        <div class="date-selector">
+                            <button class="btn btn-outline btn-sm" id="prevDate">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <span class="current-date" id="currentDate">Cargando...</span>
+                            <button class="btn btn-outline btn-sm" id="nextDate">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-primary btn-sm" id="refreshBtn">
+                            <i class="fas fa-sync-alt"></i> Actualizar
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="doctor-content">
+                <!-- Selección de Doctor -->
+                <div id="doctorSelection" class="doctor-selection" style="display: none;">
+                    <div class="selection-card">
+                        <h2>Selecciona tu Perfil</h2>
+                        <p>Por favor, selecciona tu nombre de la lista para acceder a tu panel</p>
+                        <div class="doctors-list" id="doctorsList">
+                            <!-- Lista de doctores cargada dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Agenda del Día Tab -->
+                <div id="agenda" class="tab-content active">
+                    <div class="agenda-header">
+                        <div class="header-stats">
+                            <div class="stat-badge">
+                                <span class="stat-number" id="todayAppointments">0</span>
+                                <span class="stat-label">Citas Hoy</span>
+                            </div>
+                            <div class="stat-badge">
+                                <span class="stat-number" id="completedToday">0</span>
+                                <span class="stat-label">Completadas</span>
+                            </div>
+                            <div class="stat-badge">
+                                <span class="stat-number" id="pendingToday">0</span>
+                                <span class="stat-label">Pendientes</span>
+                            </div>
+                        </div>
+                        <div class="header-time">
+                            <div class="current-time" id="currentTime">--:-- --</div>
+                            <div class="current-day" id="currentDay">---</div>
+                        </div>
+                    </div>
+
+                    <div class="agenda-content">
+                        <div class="timeline-view">
+                            <div class="timeline-hours">
+                                <!-- Horas cargadas dinámicamente -->
+                            </div>
+                            <div class="timeline-appointments" id="timelineAppointments">
+                                <!-- Citas en timeline -->
+                            </div>
+                        </div>
+
+                        <div class="appointments-list">
+                            <h3>Citas de Hoy</h3>
+                            <div class="appointments-container" id="todayAppointmentsList">
+                                <!-- Citas del día cargadas dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Próximas Citas Tab -->
+                <div id="proximas" class="tab-content">
+                    <div class="tab-header">
+                        <h2>Próximas Citas</h2>
+                        <div class="view-options">
+                            <button class="view-option active" data-view="list">
+                                <i class="fas fa-list"></i> Lista
+                            </button>
+                            <button class="view-option" data-view="calendar">
+                                <i class="fas fa-calendar"></i> Calendario
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="upcoming-content">
+                        <div class="upcoming-list" id="upcomingListView">
+                            <div class="appointments-container" id="upcomingAppointmentsList">
+                                <!-- Próximas citas cargadas dinámicamente -->
+                            </div>
+                        </div>
+
+                        <div class="upcoming-calendar hidden" id="upcomingCalendarView">
+                            <div class="calendar-header">
+                                <button class="btn btn-outline btn-sm" id="prevMonth">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <h3 id="calendarMonth">Mes Año</h3>
+                                <button class="btn btn-outline btn-sm" id="nextMonth">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            <div class="calendar-grid" id="calendarGrid">
+                                <!-- Calendario cargado dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Historial Tab -->
+                <div id="historial" class="tab-content">
+                    <div class="tab-header">
+                        <h2>Historial de Citas</h2>
+                        <div class="filters">
+                            <select id="historyStatusFilter" class="filter-select">
+                                <option value="">Todos los estados</option>
+                                <option value="completed">Completadas</option>
+                                <option value="cancelled">Canceladas</option>
+                                <option value="no_show">No Presentado</option>
+                            </select>
+                            <input type="month" id="historyMonthFilter" class="filter-select">
+                            <button class="btn btn-outline btn-sm" id="clearHistoryFilters">
+                                <i class="fas fa-times"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="history-content">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table class="data-table" id="historyTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Hora</th>
+                                                <th>Paciente</th>
+                                                <th>Contacto</th>
+                                                <th>Motivo</th>
+                                                <th>Estado</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Historial cargado dinámicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estadísticas Tab -->
+                <div id="estadisticas" class="tab-content">
+                    <div class="tab-header">
+                        <h2>Mis Estadísticas</h2>
+                        <div class="stats-period">
+                            <select id="statsPeriod" class="filter-select">
+                                <option value="week">Esta Semana</option>
+                                <option value="month" selected>Este Mes</option>
+                                <option value="quarter">Este Trimestre</option>
+                                <option value="year">Este Año</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="stats-content">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon total-appointments">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="statsTotalAppointments">0</h3>
+                                    <p>Citas Totales</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon completed-appointments">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="statsCompleted">0</h3>
+                                    <p>Completadas</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon cancellation-rate">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="statsCancellationRate">0%</h3>
+                                    <p>Tasa de Cancelación</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon no-show-rate">
+                                    <i class="fas fa-user-slash"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="statsNoShowRate">0%</h3>
+                                    <p>No Presentados</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="charts-grid">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Citas por Estado</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="doctorAppointmentsChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Citas Mensuales</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="doctorMonthlyChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card full-width">
+                                <div class="card-header">
+                                    <h3>Horarios Más Solicitados</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="doctorHoursChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Perfil Tab -->
+                <div id="perfil" class="tab-content">
+                    <div class="tab-header">
+                        <h2>Mi Perfil Profesional</h2>
+                        <button class="btn btn-outline" id="editProfileBtn">
+                            <i class="fas fa-edit"></i> Editar Perfil
+                        </button>
+                    </div>
+
+                    <div class="profile-content">
+                        <div class="profile-card">
+                            <div class="profile-header">
+                                <div class="profile-avatar">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                                <div class="profile-info">
+                                    <h3 id="profileName">Cargando...</h3>
+                                    <p id="profileSpecialty">Especialidad</p>
+                                    <div class="profile-status">
+                                        <span class="status-badge status-confirmed" id="profileStatus">Activo</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="profile-details">
+                                <div class="detail-section">
+                                    <h4>Información de Contacto</h4>
+                                    <div class="detail-grid">
+                                        <div class="detail-item">
+                                            <label>Email:</label>
+                                            <span id="profileEmail">cargando...</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <label>Teléfono:</label>
+                                            <span id="profilePhone">cargando...</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <label>Experiencia:</label>
+                                            <span id="profileExperience">cargando...</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <label>Honorarios:</label>
+                                            <span id="profileFee">cargando...</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-section">
+                                    <h4>Horario de Trabajo</h4>
+                                    <div class="detail-grid">
+                                        <div class="detail-item">
+                                            <label>Horario:</label>
+                                            <span id="profileSchedule">cargando...</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <label>Duración Consulta:</label>
+                                            <span id="profileDuration">cargando...</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <label>Días Laborales:</label>
+                                            <span id="profileDays">cargando...</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-section">
+                                    <h4>Biografía Profesional</h4>
+                                    <div class="bio-content" id="profileBio">
+                                        Cargando biografía...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modales -->
+
+    <!-- Modal Detalles Cita -->
+    <div id="appointmentDetailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalles de la Cita</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="appointment-detail-content" id="appointmentDetailContent">
+                    <!-- Contenido cargado dinámicamente -->
+                </div>
+                <div class="appointment-actions" id="appointmentActions">
+                    <!-- Acciones cargadas dinámicamente -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cambiar Estado -->
+    <div id="statusModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Cambiar Estado de Cita</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="statusModalMessage">Selecciona el nuevo estado para la cita:</p>
+                <div class="status-options">
+                    <button class="status-option" data-status="confirmed">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Confirmada</span>
+                    </button>
+                    <button class="status-option" data-status="completed">
+                        <i class="fas fa-flag-checkered"></i>
+                        <span>Completada</span>
+                    </button>
+                    <button class="status-option" data-status="cancelled">
+                        <i class="fas fa-times-circle"></i>
+                        <span>Cancelada</span>
+                    </button>
+                    <button class="status-option" data-status="no_show">
+                        <i class="fas fa-user-slash"></i>
+                        <span>No Presentado</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirmStatusChange">Confirmar Cambio</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Procesando...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/doctor.js"></script>
+</body>
+</html>
